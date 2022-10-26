@@ -33,6 +33,10 @@ def calculate_time(intervals):
     for inter in intervals:
         sum_time = sum_time + inter[1] - inter[0]
     return sum_time
+
+mem = []
+plasma = []
+exec_task = []
 if __name__ == "__main__":
     core_worker_file_sign = "python-core-worker"
     get_object_mem_sign = "hucc time for get from memory"
@@ -43,6 +47,7 @@ if __name__ == "__main__":
     sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign, exec_task_executor_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
+    muti_time = []
     for sig in sign:
         interval_time = []
         for file in os.listdir(datapath):
@@ -52,7 +57,18 @@ if __name__ == "__main__":
                         interval = process_line_sign(sig, line)
                         if interval:
                             interval_time.append(interval)
+
         merge_time = merge(interval_time)
         sum_time = calculate_time(merge_time)
         print(sig, ": ", sum_time)
+
+        if sig == get_object_mem_sign:
+            muti_time.extend(interval_time)
+        if sig == get_object_plasma_sign:
+            muti_time.extend(interval_time)
+        if sig == exec_task_callback_sign:
+            muti_time.extend(interval_time)
+        merge_time = merge(muti_time)
+        mul_sum_time = calculate_time(merge_time)
+        print("mul_time", ": ", mul_sum_time)
 
