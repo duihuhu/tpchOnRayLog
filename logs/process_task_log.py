@@ -39,7 +39,8 @@ if __name__ == "__main__":
     get_object_plasma_sign = "hucc time for get object from plasma"
     exec_task_sign = "hucc time for exec task time"
     exec_task_callback_sign = "hucc time for exec task callback to lanaguage time"
-    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign]
+    exec_task_executor_sign = "hucc time for exec task executor"
+    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign, exec_task_executor_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
     for sig in sign:
