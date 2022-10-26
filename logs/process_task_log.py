@@ -1,6 +1,6 @@
 import os
 
-complish_read_time = 1666745533.3318584
+complish_read_time = 1666759631.7104928
 
 def process_line_sign(sign, data):
     data_tmp = []
@@ -37,8 +37,9 @@ if __name__ == "__main__":
     core_worker_file_sign = "python-core-worker"
     get_object_mem_sign = "hucc time for get from memory"
     get_object_plasma_sign = "hucc time for get object from plasma"
-    exec_task_sign = "hucc time for exec task time"
-    datapath = "../logs"
+    # exec_task_sign = "hucc time for exec task time"
+    exec_task_sign = "hucc time for exec task callback to lanaguage time"
+    datapath = "/tmp/ray/session_latest/logs"
 
     mem_interval_time = []
     plasma_interval_time = []
