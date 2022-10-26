@@ -42,10 +42,8 @@ if __name__ == "__main__":
     sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
-    interval_time = []
-    # plasma_interval_time = []
-    # exec_task_interval_time = []
     for sig in sign:
+        interval_time = []
         for file in os.listdir(datapath):
             if core_worker_file_sign in file:
                 with open(datapath + "/" + file, "r") as fd:
