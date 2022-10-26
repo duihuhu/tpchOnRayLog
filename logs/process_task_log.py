@@ -37,32 +37,23 @@ if __name__ == "__main__":
     core_worker_file_sign = "python-core-worker"
     get_object_mem_sign = "hucc time for get from memory"
     get_object_plasma_sign = "hucc time for get object from plasma"
-    # exec_task_sign = "hucc time for exec task time"
-    exec_task_sign = "hucc time for exec task callback to lanaguage time"
+    exec_task_sign = "hucc time for exec task time"
+    exec_task_callback_sign = "hucc time for exec task callback to lanaguage time"
+    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
-    mem_interval_time = []
-    plasma_interval_time = []
-    exec_task_interval_time = []
-    for file in os.listdir(datapath):
-        if core_worker_file_sign in file:
-            with open(datapath + "/" + file, "r") as fd:
-                for line in fd.readlines():
-                    mem_interval = process_line_sign(get_object_mem_sign, line)
-                    if mem_interval:
-                        mem_interval_time.append(mem_interval)
-                    plasma_interval = process_line_sign(get_object_plasma_sign, line)
-                    if plasma_interval:
-                        plasma_interval_time.append(plasma_interval)
-                    task_interval = process_line_sign(exec_task_sign, line)
-                    if task_interval:
-                        exec_task_interval_time.append(task_interval)
-
-    mem_time = merge(mem_interval_time)
-    plasma_time = merge(plasma_interval_time)
-    task_time = merge(exec_task_interval_time)
-    # print(mem_time)
-    print(calculate_time(mem_time))
-    print(calculate_time(plasma_time))
-    print(calculate_time(task_time))
+    interval_time = []
+    # plasma_interval_time = []
+    # exec_task_interval_time = []
+    for sig in sign:
+        for file in os.listdir(datapath):
+            if core_worker_file_sign in file:
+                with open(datapath + "/" + file, "r") as fd:
+                    for line in fd.readlines():
+                        interval = process_line_sign(sig, line)
+                        if interval:
+                            interval_time.append(interval)
+        merge_time = merge(interval_time)
+        sum_time = calculate_time(merge_time)
+        print(sig, ": ", sum_time)
 
