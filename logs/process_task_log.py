@@ -46,7 +46,7 @@ if __name__ == "__main__":
     exec_task_interval_time = []
     for file in os.listdir(datapath):
         if core_worker_file_sign in file:
-            with open(file, "r") as fd:
+            with open(datapath + "/" + file, "r") as fd:
                 for line in fd.readlines():
                     mem_interval = process_line_sign(get_object_mem_sign, line)
                     if mem_interval:
