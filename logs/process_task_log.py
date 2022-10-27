@@ -85,18 +85,19 @@ if __name__ == "__main__":
                     if push_task_sign in line:
                         if 'start' in line:
                             sign_sentence = line.split("\n")[0].split(" ")
-                            push_task_start[sign_sentence[-8]] = float(sign[-1])
+                            push_task_start[sign_sentence[-8]] = float(sign[-1])/1000000
                         if 'end' in line:
                             sign_sentence = line.split("\n")[0].split(" ")
-                            push_task_end[sign_sentence[-8]] = float(sign[-1])
-   muti_time = []
+                            push_task_end[sign_sentence[-8]] = float(sign[-1])/1000000
+    muti_time = []
     for k,v in push_task_start:
         push_task_interval = []
-        if push_task_end.get(k):
-            push_task_interval.append(v)
-            push_task_interval.append(push_task_end.get(k))
-        if push_task_interval:
-            muti_time.append(push_task_interval)
+        if v > complish_read_time:
+            if push_task_end.get(k):
+                push_task_interval.append(v)
+                push_task_interval.append(push_task_end.get(k))
+            if push_task_interval:
+                muti_time.append(push_task_interval)
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(muti_time)
     print("push task time:", mul_sum_time)
