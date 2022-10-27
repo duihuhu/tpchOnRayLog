@@ -67,7 +67,7 @@ if __name__ == "__main__":
             muti_time.extend(interval_time)
         if sig == exec_task_callback_sign:
             muti_time.extend(interval_time)
-        merge_time = merge(muti_time)
-        mul_sum_time = calculate_time(merge_time)
-        print("mul_time", ": ", mul_sum_time)
+    merge_time = merge(muti_time)
+    mul_sum_time = calculate_time(merge_time)
+    print("mul_time", ": ", mul_sum_time)
 
