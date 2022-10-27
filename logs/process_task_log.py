@@ -43,7 +43,8 @@ if __name__ == "__main__":
     get_object_plasma_sign = "hucc time for get object from plasma"
     exec_task_sign = "hucc time for exec task time"
     exec_task_callback_sign = "hucc time for exec task callback to lanaguage time"
-    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign]
+    exec_task_args_sign = "hucc time for exec task args "
+    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign, exec_task_args_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
     muti_time = []
@@ -66,6 +67,8 @@ if __name__ == "__main__":
         if sig == get_object_plasma_sign:
             muti_time.extend(interval_time)
         if sig == exec_task_callback_sign:
+            muti_time.extend(interval_time)
+        if sig == exec_task_args_sign:
             muti_time.extend(interval_time)
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(merge_time)
