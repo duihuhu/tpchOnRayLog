@@ -39,6 +39,7 @@ plasma = []
 exec_task = []
 if __name__ == "__main__":
     core_worker_file_sign = "python-core-worker"
+    core_driver_file_sign = "python-core-driver"
     get_object_mem_sign = "hucc time for get from memory"
     get_object_plasma_sign = "hucc time for get object from plasma"
     exec_task_sign = "hucc time for exec task time"
@@ -86,13 +87,14 @@ if __name__ == "__main__":
                     if push_task_sign in line:
                         if 'start' in line:
                             sign_sentence = line.split("\n")[0].split(" ")
-                            push_task_start[sign_sentence[-8]] = float(sign[-1])/1000000
+                            push_task_start[sign_sentence[-7]] = float(sign_sentence[-1])/1000000
                         if 'end' in line:
                             sign_sentence = line.split("\n")[0].split(" ")
-                            push_task_end[sign_sentence[-8]] = float(sign[-1])/1000000
+                            push_task_end[sign_sentence[-7]] = float(sign_sentence[-1])/1000000
     muti_time = []
-    for k,v in push_task_start:
+    for k in push_task_start:
         push_task_interval = []
+        v = push_task_start.get(k)
         if v > complish_read_time:
             if push_task_end.get(k):
                 push_task_interval.append(v)
