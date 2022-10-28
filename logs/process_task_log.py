@@ -38,8 +38,8 @@ mem = []
 plasma = []
 exec_task = []
 if __name__ == "__main__":
-    core_worker_file_sign = "python-core-worker"
-    core_driver_file_sign = "python-core-driver"
+    core_worker_file_sign = "python-core"
+    core_driver_file_sign = "python-core"
     get_object_mem_sign = "hucc time for get from memory"
     get_object_plasma_sign = "hucc time for get object from plasma"
     get_object_remote_plasma_sign = "hucc get remote plasma plasma"
@@ -67,13 +67,9 @@ if __name__ == "__main__":
         sum_time = calculate_time(merge_time)
         print(sig, ": ", sum_time)
 
-        if sig == get_object_mem_sign:
+        if sig == get_object_remote_plasma_sign:
             muti_time.extend(interval_time)
         if sig == get_object_plasma_sign:
-            muti_time.extend(interval_time)
-        if sig == exec_task_callback_sign:
-            muti_time.extend(interval_time)
-        if sig == exec_task_args_sign:
             muti_time.extend(interval_time)
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(merge_time)
