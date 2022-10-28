@@ -81,13 +81,12 @@ if __name__ == "__main__":
     push_task_start = {}
     push_task_end = {}
     for f in os.listdir(datapath):
-        if core_worker_file_sign in f:
+        if core_driver_file_sign in f:
             with open(datapath + "/" + f, "r") as fd:
                 for line in fd.readlines():
                     if push_task_sign in line:
                         if 'start' in line:
                             sign_sentence = line.split("\n")[0].split(" ")
-                            print(sign_sentence)
                             push_task_start[sign_sentence[-7]] = float(sign_sentence[-1])/1000000
                         if 'end' in line:
                             sign_sentence = line.split("\n")[0].split(" ")
