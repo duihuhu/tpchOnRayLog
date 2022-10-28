@@ -94,13 +94,13 @@ if __name__ == "__main__":
     muti_time = []
     for k in push_task_start:
         push_task_interval = []
-        v = push_task_start.get(k)
+        v = push_task_start[k]
         if v > complish_read_time:
             if push_task_end.get(k):
                 push_task_interval.append(v)
-                push_task_interval.append(push_task_end.get(k))
-            if push_task_interval:
-                muti_time.append(push_task_interval)
+                push_task_interval.append(push_task_end[k])
+                if push_task_interval:
+                    muti_time.append(push_task_interval)
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(merge_time)
     print("push task time:", mul_sum_time)
