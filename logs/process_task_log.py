@@ -44,9 +44,10 @@ if __name__ == "__main__":
     exec_task_sign = "hucc time for exec task time"
     exec_task_callback_sign = "hucc time for exec task callback to lanaguage time"
     exec_task_args_sign = "hucc time for exec task args"
-
+    put_object_mem_sign = "hucc time for put from plasma"
     push_task_sign = "hucc push normal task"
-    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign, exec_task_args_sign]
+
+    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign, exec_task_args_sign, put_object_mem_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
     muti_time = []
