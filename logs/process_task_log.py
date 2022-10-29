@@ -40,6 +40,7 @@ exec_task = []
 if __name__ == "__main__":
     core_worker_file_sign = "python-core"
     core_driver_file_sign = "python-core"
+    raylet_file_sign = "raylet.out"
     get_object_mem_sign = "hucc time for get from memory"
     get_object_plasma_sign = "hucc time for get object from plasma"
     get_object_remote_plasma_sign = "hucc get remote plasma plasma"
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     exec_task_args_sign = "hucc time for exec task args"
     put_object_mem_sign = "hucc time for put from plasma"
     push_task_sign = "hucc push normal task"
-
+    send_object_sign = "HandleSendFinished"
     sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign, exec_task_args_sign, put_object_mem_sign, get_object_remote_plasma_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
@@ -101,3 +102,21 @@ if __name__ == "__main__":
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(merge_time)
     print("push task time:", mul_sum_time)
+
+
+    muti_time = []
+    for f in os.listdir(datapath):
+        if raylet_file_sign in f:
+            with open(datapath + "/" + f, "r") as fd:
+                for line in fd.readlines():
+                    interval = []
+                    if send_object_sign in line:
+                        start_time = line.split("\n")[0].split(" ")[-2]
+                        end_time = line.split("\n")[0].split(" ")[-1]
+                        interval.append(start_time)
+                        interval.append(end_time)
+                    if interval:
+                        muti_time.append(interval)
+    merge_time = merge(muti_time)
+    mul_sum_time = calculate_time(merge_time)
+    print("send object:", mul_sum_time)
