@@ -111,8 +111,8 @@ if __name__ == "__main__":
                 for line in fd.readlines():
                     interval = []
                     if send_object_sign in line:
-                        start_time = line.split("\n")[0].split(" ")[-2]
-                        end_time = line.split("\n")[0].split(" ")[-1]
+                        start_time = float(line.split("\n")[0].split(" ")[-3])
+                        end_time = float(line.split("\n")[0].split(" ")[-1])
                         interval.append(start_time)
                         interval.append(end_time)
                     if interval:
