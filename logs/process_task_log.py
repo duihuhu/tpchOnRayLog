@@ -1,13 +1,14 @@
 import os
 
-complish_read_time = 1666760205.0933344
+start_phase_time =
+end_phase_time =
 
 def process_line_sign(sign, data):
     data_tmp = []
     if sign in line:
         get_object_mem_time = line.split("\n")[0].split(" ")
         start_time, end_time =  float(get_object_mem_time[-1]) / 1000000, float(get_object_mem_time[-2][:-1]) / 1000000
-        if start_time > complish_read_time:
+        if start_time > start_phase_time and end_time < end_phase_time:
             data_tmp.append(start_time)
             data_tmp.append(end_time)
     return data_tmp
@@ -43,14 +44,14 @@ if __name__ == "__main__":
     raylet_file_sign = "raylet.out"
     get_object_mem_sign = "hucc time for get from memory"
     get_object_plasma_sign = "hucc time for get object from plasma"
-    get_object_remote_plasma_sign = "hucc get remote plasma plasma"
-    exec_task_sign = "hucc time for exec task time"
+    # get_object_remote_plasma_sign = "hucc get remote plasma plasma"
+    # exec_task_sign = "hucc time for exec task time"
     exec_task_callback_sign = "hucc time for exec task callback to lanaguage time"
     exec_task_args_sign = "hucc time for exec task args"
-    put_object_mem_sign = "hucc time for put from plasma"
+    # put_object_mem_sign = "hucc time for put from plasma"
     push_task_sign = "hucc push normal task"
     send_object_sign = "HandleSendFinished"
-    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_sign, exec_task_callback_sign, exec_task_args_sign, put_object_mem_sign, get_object_remote_plasma_sign]
+    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_callback_sign, exec_task_args_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
     muti_time = []
@@ -68,13 +69,13 @@ if __name__ == "__main__":
         sum_time = calculate_time(merge_time)
         print(sig, ": ", sum_time)
 
-        if sig == get_object_remote_plasma_sign:
+        if sig == get_object_mem_sign:
             muti_time.extend(interval_time)
         if sig == get_object_plasma_sign:
             muti_time.extend(interval_time)
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(merge_time)
-    print("mul_time", ": ", mul_sum_time)
+    print("mem_plasma", ": ", mul_sum_time)
 
     push_task_start = {}
     push_task_end = {}
@@ -93,12 +94,14 @@ if __name__ == "__main__":
     for k in push_task_start:
         push_task_interval = []
         v = push_task_start[k]
-        if v > complish_read_time:
+        if v > start_phase_time:
             if push_task_end.get(k):
-                push_task_interval.append(v)
-                push_task_interval.append(push_task_end[k])
-                if push_task_interval:
-                    muti_time.append(push_task_interval)
+                v1 = push_task_end[k]
+                if v1 < end_phase_time:
+                    push_task_interval.append(v)
+                    push_task_interval.append(push_task_end[k])
+                    if push_task_interval:
+                        muti_time.append(push_task_interval)
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(merge_time)
     print("push task time:", mul_sum_time)
