@@ -158,8 +158,12 @@ if __name__ == "__main__":
 
     merge_time = merge(mem_plasma_time)
     mul_sum_time = calculate_time(merge_time)
-    print("mem_plasma", ": ", mul_sum_time)
+    print("mem_local_plasma", ": ", mul_sum_time)
 
+    pull_push_interval.extend(mem_plasma_time)
+    merge_time = merge(pull_push_interval)
+    mul_sum_time = calculate_time(merge_time)
+    print("mem_local_pull/push_plasma", ": ", mul_sum_time)
 
     push_task_start = {}
     push_task_end = {}
