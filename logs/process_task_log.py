@@ -1,7 +1,7 @@
 import os
 
-start_phase_time =
-end_phase_time =
+start_phase_time = ""
+end_phase_time = ""
 
 def process_line_sign(sign, data):
     data_tmp = []
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     exec_task_args_sign = "hucc time for exec task args"
     # put_object_mem_sign = "hucc time for put from plasma"
     push_task_sign = "hucc push normal task"
-    send_object_sign = "HandleSendFinished"
+    # send_object_sign = "HandleSendFinished"
     sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_callback_sign, exec_task_args_sign]
     datapath = "/tmp/ray/session_latest/logs"
 
@@ -107,19 +107,20 @@ if __name__ == "__main__":
     print("push task time:", mul_sum_time)
 
 
-    muti_time = []
-    for f in os.listdir(datapath):
-        if raylet_file_sign in f:
-            with open(datapath + "/" + f, "r") as fd:
-                for line in fd.readlines():
-                    interval = []
-                    if send_object_sign in line:
-                        start_time = float(line.split("\n")[0].split(" ")[-3])
-                        end_time = float(line.split("\n")[0].split(" ")[-1])
-                        interval.append(start_time)
-                        interval.append(end_time)
-                    if interval:
-                        muti_time.append(interval)
-    merge_time = merge(muti_time)
-    mul_sum_time = calculate_time(merge_time)
-    print("send object:", mul_sum_time)
+
+    # muti_time = []
+    # for f in os.listdir(datapath):
+    #     if raylet_file_sign in f:
+    #         with open(datapath + "/" + f, "r") as fd:
+    #             for line in fd.readlines():
+    #                 interval = []
+    #                 if send_object_sign in line:
+    #                     start_time = float(line.split("\n")[0].split(" ")[-3])
+    #                     end_time = float(line.split("\n")[0].split(" ")[-1])
+    #                     interval.append(start_time)
+    #                     interval.append(end_time)
+    #                 if interval:
+    #                     muti_time.append(interval)
+    # merge_time = merge(muti_time)
+    # mul_sum_time = calculate_time(merge_time)
+    # print("send object:", mul_sum_time)
