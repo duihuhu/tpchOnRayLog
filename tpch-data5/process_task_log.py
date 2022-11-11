@@ -1,7 +1,7 @@
 import os
 
-start_phase_time = ""
-end_phase_time = ""
+start_phase_time = 1667707200.625101
+end_phase_time = 1867707200.625101
 
 def process_line_sign(sign, data):
     data_tmp = []
@@ -50,77 +50,38 @@ if __name__ == "__main__":
     exec_task_args_sign = "hucc time for exec task args"
     # put_object_mem_sign = "hucc time for put from plasma"
     push_task_sign = "hucc push normal task"
-    # send_object_sign = "HandleSendFinished"
-    sign = [get_object_mem_sign, get_object_plasma_sign, exec_task_callback_sign, exec_task_args_sign]
-    datapath = "/tmp/ray/session_latest/logs"
 
-    muti_time = []
-    for sig in sign:
-        interval_time = []
-        for f in os.listdir(datapath):
-            if core_worker_file_sign in f:
-                with open(datapath + "/" + f, "r") as fd:
-                    for line in fd.readlines():
-                        interval = process_line_sign(sig, line)
-                        if interval:
-                            interval_time.append(interval)
+    push_rpc_task_sign = "hucc task rpc push normal task id start"
+    push_rpc_end_task_sign = "hucc task rpc handle push normal task id entry end"
 
-        merge_time = merge(interval_time)
-        sum_time = calculate_time(merge_time)
-        print(sig, ": ", sum_time)
+    datapath = "."
 
-        if sig == get_object_mem_sign:
-            muti_time.extend(interval_time)
-        if sig == get_object_plasma_sign:
-            muti_time.extend(interval_time)
-    merge_time = merge(muti_time)
-    mul_sum_time = calculate_time(merge_time)
-    print("mem_plasma", ": ", mul_sum_time)
-
-    push_task_start = {}
-    push_task_end = {}
+    push_rpc_task_start = {}
+    push_rpc_task_end = {}
     for f in os.listdir(datapath):
         if core_driver_file_sign in f:
             with open(datapath + "/" + f, "r") as fd:
                 for line in fd.readlines():
-                    if push_task_sign in line:
-                        if 'start' in line:
-                            sign_sentence = line.split("\n")[0].split(" ")
-                            push_task_start[sign_sentence[-7]] = float(sign_sentence[-1])/1000000
-                        if 'end' in line:
-                            sign_sentence = line.split("\n")[0].split(" ")
-                            push_task_end[sign_sentence[-7]] = float(sign_sentence[-1])/1000000
+                    if push_rpc_task_sign in line:
+                        sign_sentence = line.split("\n")[0].split(" ")
+                        push_rpc_task_start[sign_sentence[-2]] = float(sign_sentence[-1])/1000000
+                    if push_rpc_end_task_sign in line:
+                        sign_sentence = line.split("\n")[0].split(" ")
+                        push_rpc_task_end[sign_sentence[-2]] = float(sign_sentence[-1])/1000000
+
     muti_time = []
-    for k in push_task_start:
+    for k in push_rpc_task_start:
         push_task_interval = []
-        v = push_task_start[k]
+        v = push_rpc_task_start[k]
         if v > start_phase_time:
-            if push_task_end.get(k):
-                v1 = push_task_end[k]
+            if push_rpc_task_end.get(k):
+                v1 = push_rpc_task_end[k]
                 if v1 < end_phase_time:
                     push_task_interval.append(v)
-                    push_task_interval.append(push_task_end[k])
+                    push_task_interval.append(push_rpc_task_end[k])
                     if push_task_interval:
                         muti_time.append(push_task_interval)
+    print(len(muti_time))
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(merge_time)
     print("push task time:", mul_sum_time)
-
-
-
-    # muti_time = []
-    # for f in os.listdir(datapath):
-    #     if raylet_file_sign in f:
-    #         with open(datapath + "/" + f, "r") as fd:
-    #             for line in fd.readlines():
-    #                 interval = []
-    #                 if send_object_sign in line:
-    #                     start_time = float(line.split("\n")[0].split(" ")[-3])
-    #                     end_time = float(line.split("\n")[0].split(" ")[-1])
-    #                     interval.append(start_time)
-    #                     interval.append(end_time)
-    #                 if interval:
-    #                     muti_time.append(interval)
-    # merge_time = merge(muti_time)
-    # mul_sum_time = calculate_time(merge_time)
-    # print("send object:", mul_sum_time)

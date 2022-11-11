@@ -1,7 +1,10 @@
 import os
 
-start_phase_time = 1667707200.625101
+start_phase_time = 1667726922.6232402
 end_phase_time = 1867707200.625101
+
+# start_phase_time = 1667728564.9229202
+# end_phase_time = 1867707200.625101
 
 def process_line_sign(sign, data):
     data_tmp = []
@@ -51,13 +54,18 @@ if __name__ == "__main__":
     # put_object_mem_sign = "hucc time for put from plasma"
     push_task_sign = "hucc push normal task"
 
-    push_rpc_task_sign = "hucc task rpc push normal task id start"
-    push_rpc_end_task_sign = "hucc task rpc handle push normal task id entry end"
+    push_rpc_task_sign = "hucc task rpc push normal task"
+    push_rpc_handle_task_sign = "hucc task rpc handle push normal task"
+    push_rpc_callback_task_sign = "hucc task callback rpc push normal task"
+    push_rpc_handle_callback_task_sign = "hucc task callback rpc handle push normal task"
 
-    datapath = "."
+
+    datapath = "logs"
 
     push_rpc_task_start = {}
     push_rpc_task_end = {}
+    push_rpc_callback_start = {}
+    push_rpc_callback_end = {}
     for f in os.listdir(datapath):
         if core_driver_file_sign in f:
             with open(datapath + "/" + f, "r") as fd:
@@ -65,10 +73,17 @@ if __name__ == "__main__":
                     if push_rpc_task_sign in line:
                         sign_sentence = line.split("\n")[0].split(" ")
                         push_rpc_task_start[sign_sentence[-2]] = float(sign_sentence[-1])/1000000
-                    if push_rpc_end_task_sign in line:
+                    if push_rpc_handle_task_sign in line:
                         sign_sentence = line.split("\n")[0].split(" ")
                         push_rpc_task_end[sign_sentence[-2]] = float(sign_sentence[-1])/1000000
+                    if push_rpc_callback_task_sign in line:
+                        sign_sentence = line.split("\n")[0].split(" ")
+                        push_rpc_callback_start[sign_sentence[-2]] = float(sign_sentence[-1])/1000000
+                    if push_rpc_handle_callback_task_sign in line:
+                        sign_sentence = line.split("\n")[0].split(" ")
+                        push_rpc_callback_end[sign_sentence[-2]] = float(sign_sentence[-1])/1000000
 
+    merge_pups_time = []
     muti_time = []
     for k in push_rpc_task_start:
         push_task_interval = []
@@ -77,11 +92,33 @@ if __name__ == "__main__":
             if push_rpc_task_end.get(k):
                 v1 = push_rpc_task_end[k]
                 if v1 < end_phase_time:
+                    # print(v, v1)
                     push_task_interval.append(v)
-                    push_task_interval.append(push_rpc_task_end[k])
+                    push_task_interval.append(v1)
                     if push_task_interval:
                         muti_time.append(push_task_interval)
-    print(len(muti_time))
     merge_time = merge(muti_time)
     mul_sum_time = calculate_time(merge_time)
     print("push task time:", mul_sum_time)
+    # merge_pups_time.extend(merge_time)
+
+    muti_time = []
+    for k in push_rpc_callback_start:
+        push_task_interval = []
+        v = push_rpc_callback_start[k]
+        if v > start_phase_time:
+            if push_rpc_callback_end.get(k):
+                v1 = push_rpc_callback_end[k]
+                if v1 < end_phase_time:
+                    # print(v, v1)
+                    push_task_interval.append(v)
+                    push_task_interval.append(v1)
+                    if push_task_interval:
+                        muti_time.append(push_task_interval)
+
+    merge_time = merge(muti_time)
+    mul_sum_time = calculate_time(merge_time)
+    print("push task callback time:", mul_sum_time)
+    # merge_pups_time.extend(merge_time)
+    # mul_sum_time = calculate_time(merge_pups_time)
+    # print("push task total callback time:", mul_sum_time)
